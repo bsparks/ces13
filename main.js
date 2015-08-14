@@ -3,8 +3,18 @@ var world = new CES.World();
 var Foo = function(world) {
   this.world = world;
 
-  this.update = function(delta, elapsed, ts) {
+  this.canvas = document.createElement('canvas');
+  this.canvas.width = 300;
+  this.canvas.height = 300;
+  document.body.appendChild(this.canvas);
 
+  this.ctx = this.canvas.getContext('2d');
+
+  this.ctx.fillStyle = "green";
+  this.ctx.fillRect(0, 0, 300, 300);
+
+  this.update = function(delta, elapsed, ts) {
+    // nil
   };
 };
 
