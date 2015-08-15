@@ -67,6 +67,9 @@ CES.Entity = function(components, name) {
 CES.Entity.prototype = {
   hasComponent: function(component) {
     return !!this._components[component];
+  },
+  getComponent: function(name) {
+    return this._components[name];
   }
 };
 CES.Entity.prototype.constructor = CES.Entity;

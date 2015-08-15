@@ -1,34 +1,31 @@
 var world = new CES.World();
 
-var Foo = function(world) {
-  this.world = world;
-
-  this.canvas = document.createElement('canvas');
-  this.canvas.width = 300;
-  this.canvas.height = 300;
-  document.body.appendChild(this.canvas);
-
-  this.ctx = this.canvas.getContext('2d');
-
-  this.ctx.fillStyle = "green";
-  this.ctx.fillRect(0, 0, 300, 300);
-
-  this.update = function(delta, elapsed, ts) {
-    // nil
-  };
-};
-
 var heroPrefab = {
   transform: {
-    position: [0, 0, 0],
-    rotation: [0, 0, 0]
+    x: 100,
+    y: 100,
+    sx: 1,
+    sy: 1,
+    r: 0
+  },
+  shape: {
+    type: "rect",
+		fill: "red",
+		stroke: "darkred",
+		lineWidth: 4,
+		width: 40,
+		height: 80
   }
 };
 
-world.addEntity(new CES.Entity(heroPrefab, 'bob'));
+var bob = new CES.Entity(heroPrefab, 'bob');
+bob.getComponent('transform').x += 50;
+bob.getComponent('shape').fill = 'blue';
+
+world.addEntity(bob);
 world.addEntity(new CES.Entity(heroPrefab, 'jim'));
 
-world.addSystem(Foo);
+world.addSystem(CanvasRenderer);
 
 function run() {
   world.step();
