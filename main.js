@@ -4,6 +4,8 @@ var world = new CES.World();
 world.assets = {};
 world.assets.images = new ImageLoader();
 
+world.input = new InputSystem();
+
 var heroPrefab = {
   transform: {
     x: 100,
@@ -33,6 +35,9 @@ var jimPrefab = {
   sprite: {
     image: 'assets/images/hero.png',
     alpha: 1
+  },
+  player: {
+    speed: 0.05
   }
 };
 
@@ -43,6 +48,7 @@ bob.getComponent('shape').fill = 'blue';
 world.addEntity(bob);
 world.addEntity(new CES.Entity(jimPrefab, 'jim'));
 
+world.addSystem(PlayerSystem);
 world.addSystem(CanvasRenderer);
 
 function run() {

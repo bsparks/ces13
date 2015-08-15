@@ -5,7 +5,9 @@ var gulp = require('gulp'),
 gulp.task('default', function() {
     return gulp.src([
         'ces.js',
+        'services/input-system.js',
         'services/image-loader.js',
+        'systems/player-system.js',
         'systems/canvas-renderer.js',
         'main.js'
     ])
