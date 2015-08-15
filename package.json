@@ -1,0 +1,29 @@
+{
+  "name": "ces_play",
+  "version": "1.0.0",
+  "description": "game for 13k",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bsparks/ces13.git"
+  },
+  "keywords": [
+    "ces",
+    "canvas",
+    "javascript"
+  ],
+  "author": "Ben Sparks <bsparks42@gmail.com> (https://github.com/bsparks)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bsparks/ces13/issues"
+  },
+  "homepage": "https://github.com/bsparks/ces13#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-uglify": "^1.2.0"
+  }
+}
