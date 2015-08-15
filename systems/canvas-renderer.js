@@ -48,7 +48,21 @@ var CanvasRenderer = function(world) {
   		ctx.arc(0, 0, shape.radius, 0, Math.PI * 2);
   		ctx.fill();
   		ctx.stroke();
-  	}
+  	},
+    sprite: function (ctx, sprite) {
+      world.assets.images.load(sprite.image).then(function(image) {
+        // have to dump a reference here, because async blows up the renderer below
+        sprite.__image = image;
+      });
+
+      var image = sprite.__image;
+      if (image) {
+        var x = -Math.round(image.width / 2);
+      	var y = -Math.round(image.height / 2);
+      	ctx.globalAlpha = sprite.alpha;
+      	ctx.drawImage(image, x, y);
+      }
+    }
   };
 
   this.drawShape = function(shape) {
@@ -62,6 +76,20 @@ var CanvasRenderer = function(world) {
     var renderer = this;
 
     this.clear('black');
+
+    this.world.getEntities('transform', 'sprite').forEach(function(entity) {
+      var transform = entity.getComponent('transform'),
+          sprite = entity.getComponent('sprite');
+
+          renderer.ctx.save();
+          var x = Math.round(transform.x);
+        	var y = Math.round(transform.y);
+        	renderer.ctx.translate(x, y);
+        	renderer.ctx.rotate(transform.r);
+        	renderer.ctx.scale(transform.sx, transform.sy);
+          renderers.sprite(renderer.ctx, sprite);
+          renderer.ctx.restore();
+    });
 
     this.world.getEntities('transform', 'shape').forEach(function(entity) {
       var transform = entity.getComponent('transform'),
