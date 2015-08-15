@@ -1,4 +1,4 @@
-var CanvasRenderer = function(world) {
+function CanvasRenderer(world) {
   this.world = world;
 
   var canvas = this.canvas = document.createElement('canvas');

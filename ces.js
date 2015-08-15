@@ -76,6 +76,7 @@ CES.Entity.prototype.constructor = CES.Entity;
 
 CES.World = function() {
   this._systems = [];
+  this._systemRegistry = {};
   this._entities = {};
   this._families = {};
 
@@ -92,7 +93,12 @@ CES.World = function() {
 
 CES.World.prototype = {
   addSystem: function(System) {
-    this._systems.push(new System(this));
+    var instance = new System(this);
+    this._systemRegistry[System.name] = instance;
+    this._systems.push(instance);
+  },
+  getSystem: function(name) {
+    return this._systemRegistry[name] || null;
   },
   addEntity: function(entity) {
     this._entities[entity.id] = entity;

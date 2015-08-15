@@ -1,18 +1,21 @@
-var PlayerSystem = function(world) {
+function PlayerSystem(world) {
     this.world = world;
     
     this.update = function(dt) {
         var players = this.world.getEntities('player', 'transform');
+        var input = this.world.getSystem('InputSystem');
+        
         players.forEach(function(player) {
            var pc = player.getComponent('player'),
             transform = player.getComponent('transform');
             
-            if (world.input.pressed('LEFT')) {
-                transform.x -= player.speed * dt;
+            if (input.pressed('LEFT')) {
+                //console.log('left: ', transform, player, dt);
+                transform.x -= pc.speed * dt;
             }
             
-            if (world.input.pressed('RIGHT')) {
-                transform.x += player.speed * dt;
+            if (input.pressed('RIGHT')) {
+                transform.x += pc.speed * dt;
             }
         });
     };

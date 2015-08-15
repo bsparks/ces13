@@ -1,4 +1,4 @@
-var InputSystem = function() {
+function InputSystem() {
     this._keys = {};
     
     this.codes = {
@@ -6,16 +6,16 @@ var InputSystem = function() {
         RIGHT: 39
     };
     
-    window.addEventListener('keyup', this.onKeyUp.bind(this));
     window.addEventListener('keydown', this.onKeyDown.bind(this));
+    window.addEventListener('keyup', this.onKeyUp.bind(this));
 };
 
 InputSystem.prototype.onKeyDown = function(event) {
-    this._keys[event.keyCode] = {down: true, repeat: event.repeat};
+    this._keys[event.keyCode] = true;
 };
 
 InputSystem.prototype.onKeyUp = function(event) {
-    this._keys[event.keyCode] = {down: false, repeat: false};
+    this._keys[event.keyCode] = false;
 };
 
 InputSystem.prototype._getKey = function(which) {
@@ -34,10 +34,10 @@ InputSystem.prototype._getKey = function(which) {
 
 InputSystem.prototype.pressed = function(which) {
     var key = this._getKey(which);
-    return key && key.down && !key.repeat;
+    return !!key;
 };
 
 InputSystem.prototype.down = function(which) {
     var key = this._getKey(which);
-    return key && key.down;
+    return !!key;
 };
