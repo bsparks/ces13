@@ -56,6 +56,21 @@ ParticleSystem.prototype.update = function (delta, elapsed) {
         }
 
         // update velocity
+        particle.old = particle.old || {};
+        particle.old.v = clone(particle.v);
+        if (!particle.old.a) {
+          particle.old.a = clone(particle.a);
+        }
+        // v += 0.5 * (a_prev + a) * dt
+        particle.v.x += 0.5 * (particle.old.a.x + particle.a.x) * delta;
+        particle.v.y += 0.5 * (particle.old.a.y + particle.a.y) * delta;
+        
+        particle.old.a.x = particle.a.x;
+        particle.old.a.y = particle.a.y;
+        
+        particle.a.x = 0;
+        particle.a.y = 0;
+        
         particle.x += particle.v.x * delta;
         particle.y += particle.v.y * delta;
 
@@ -74,6 +89,7 @@ ParticleSystem.prototype.createPool = function (id, size, particleData) {
     x: 0,
     y: 0,
     v: clone(particleData.v),
+    a: clone(particleData.a),
     color: clone(particleData.color)
   };
 
