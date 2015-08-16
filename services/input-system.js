@@ -19,7 +19,7 @@ InputSystem.prototype.onKeyDown = function(event) {
       this._keys[event.keyCode].pressed = true;
     }
     this._keys[event.keyCode].down = true;
-    console.debug('keydown', this._keys[event.keyCode]);
+    //console.debug('keydown', this._keys[event.keyCode]);
 };
 
 InputSystem.prototype.onKeyUp = function(event) {

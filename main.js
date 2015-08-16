@@ -35,7 +35,7 @@ var jimPrefab = {
     alpha: 1
   },
   player: {
-    speed: 20
+    speed: 2
   }
 };
 

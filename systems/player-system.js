@@ -11,19 +11,19 @@ function PlayerSystem(world) {
 
             if (input.pressed('LEFT')) {
                 //console.log('left: ', transform, player, dt);
-                transform.x -= pc.speed * dt;
+                transform.x -= pc.speed;
             }
 
             if (input.pressed('RIGHT')) {
-                transform.x += pc.speed * dt;
+                transform.x += pc.speed;
             }
 
             if (input.pressed('UP')) {
-                transform.y -= pc.speed * dt;
+                transform.y -= pc.speed;
             }
 
             if (input.pressed('DOWN')) {
-                transform.y += pc.speed * dt;
+                transform.y += pc.speed;
             }
         });
     };
