@@ -24,6 +24,10 @@ function CanvasRenderer(world) {
   this.ctx = this.canvas.getContext('2d');
   this.ctx.imageSmoothingEnabled = false;
 
+  // hack for now, TODO: move canvas outside of this renderer
+  world.canvas = canvas;
+  world.context = this.ctx;
+
   resize();
 
   window.addEventListener('resize', resize, false);

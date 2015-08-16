@@ -13,9 +13,9 @@ var heroPrefab = {
     r: 0
   },
   shape: {
-    type: "rect",
-		fill: "red",
-		stroke: "darkred",
+    type: 'rect',
+		fill: 'dodgerblue',
+		stroke: 'blue',
 		lineWidth: 4,
 		width: 40,
 		height: 80
@@ -35,13 +35,21 @@ var jimPrefab = {
     alpha: 1
   },
   player: {
-    speed: 2
+    speed: 8
+  },
+  particleEmitter: {
+    duration: Infinity,
+    rate: 0.1,
+    numParticles: 300,
+    particles: [{
+      life: 5,
+      color: {r: 255, g: 0, b: 0, a: 1},
+      v: {x: 0, y: -20}
+    }]
   }
 };
 
 var bob = new CES.Entity(heroPrefab, 'bob');
-bob.getComponent('transform').x += 50;
-bob.getComponent('shape').fill = 'blue';
 
 world.addEntity(bob);
 world.addEntity(new CES.Entity(jimPrefab, 'jim'));
@@ -49,6 +57,7 @@ world.addEntity(new CES.Entity(jimPrefab, 'jim'));
 world.addSystem(InputSystem);
 world.addSystem(PlayerSystem);
 world.addSystem(CanvasRenderer);
+world.addSystem(ParticleSystem);
 
 function run() {
   world.step();
