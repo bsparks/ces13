@@ -56,21 +56,12 @@ ParticleSystem.prototype.update = function (delta, elapsed) {
         }
 
         // update velocity
-        particle.old = particle.old || {};
-        particle.old.v = clone(particle.v);
-        if (!particle.old.a) {
-          particle.old.a = clone(particle.a);
-        }
-        // v += 0.5 * (a_prev + a) * dt
-        particle.v.x += 0.5 * (particle.old.a.x + particle.a.x) * delta;
-        particle.v.y += 0.5 * (particle.old.a.y + particle.a.y) * delta;
-        
-        particle.old.a.x = particle.a.x;
-        particle.old.a.y = particle.a.y;
-        
-        particle.a.x = 0;
-        particle.a.y = 0;
-        
+        particle.a = particle.a || {x: 0, y: 0};
+
+        // v += 0.5 * a * dt
+        particle.v.x += 0.5 * particle.a.x * delta;
+        particle.v.y += 0.5 * particle.a.y * delta;
+
         particle.x += particle.v.x * delta;
         particle.y += particle.v.y * delta;
 
@@ -89,11 +80,13 @@ ParticleSystem.prototype.createPool = function (id, size, particleData) {
     x: 0,
     y: 0,
     v: clone(particleData.v),
+    vspread: clone(particleData.vspread),
     a: clone(particleData.a),
     color: clone(particleData.color)
   };
 
   this._particles[id] = [];
+  this._particles[id].baseParticle = clone(particle);
   for (var i=0; i<size; i++) {
     this._particles[id].push(clone(particle));
   }
@@ -115,6 +108,21 @@ ParticleSystem.prototype.spawnParticle = function (poolId, x, y) {
     particle.x = x;
     particle.y = y;
     particle.age = 0;
+    particle.v = clone(pool.baseParticle.v);
+    particle.a = clone(pool.baseParticle.a);
+    if (particle.vspread) {
+      if (Array.isArray(particle.vspread.x)) {
+        particle.v.x += randomRange(particle.vspread.x[0], particle.vspread.x[1]);
+      } else {
+        particle.v.x += randomRange(Math.min(0, particle.vspread.x), Math.max(0, particle.vspread.x));
+      }
+
+      if (Array.isArray(particle.vspread.y)) {
+        particle.v.y += randomRange(particle.vspread.y[0], particle.vspread.y[1]);
+      } else {
+        particle.v.y += randomRange(Math.min(0, particle.vspread.y), Math.max(0, particle.vspread.y));
+      }
+    }
   }
 };
 

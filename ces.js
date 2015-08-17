@@ -10,6 +10,10 @@ function UUID() {
     ].join('-');
 }
 
+function randomRange(min, max) {
+  return Math.random() * (max - min + 1) + min;
+}
+
 function clone(obj) {
     var copy;
 

@@ -39,13 +39,14 @@ var jimPrefab = {
   },
   particleEmitter: {
     duration: Infinity,
-    rate: 0.1,
+    rate: 0.01,
     numParticles: 300,
     particles: [{
       life: 5,
       color: {r: 255, g: 0, b: 0, a: 1},
-      v: {x: 0, y: -10},
-      a: {x: 0, y: -3}
+      v: {x: 0, y: -15},
+      vspread: {x: [-15, 15], y: 0},
+      a: {x: 0, y: 9.8}
     }]
   }
 };
