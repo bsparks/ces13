@@ -79,7 +79,7 @@ function CanvasRenderer(world) {
   this.update = function(delta, elapsed, ts) {
     var renderer = this;
 
-    this.clear('black');
+    this.clear('#cccccc');
 
     this.world.getEntities('transform', 'sprite').forEach(function(entity) {
       var transform = entity.getComponent('transform'),

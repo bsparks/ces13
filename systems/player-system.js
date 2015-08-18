@@ -12,10 +12,12 @@ function PlayerSystem(world) {
             if (input.pressed('LEFT')) {
                 //console.log('left: ', transform, player, dt);
                 transform.x -= pc.speed;
+                transform.sx = -1 * Math.abs(transform.sx);
             }
 
             if (input.pressed('RIGHT')) {
                 transform.x += pc.speed;
+                transform.sx = Math.abs(transform.sx);
             }
 
             if (input.pressed('UP')) {

@@ -4,25 +4,7 @@ var world = new CES.World();
 world.assets = {};
 world.assets.images = new ImageLoader();
 
-var heroPrefab = {
-  transform: {
-    x: 100,
-    y: 100,
-    sx: 1,
-    sy: 1,
-    r: 0
-  },
-  shape: {
-    type: 'rect',
-		fill: 'dodgerblue',
-		stroke: 'blue',
-		lineWidth: 4,
-		width: 40,
-		height: 80
-  }
-};
-
-var jimPrefab = {
+var hero = {
   transform: {
     x: 200,
     y: 100,
@@ -38,7 +20,7 @@ var jimPrefab = {
     speed: 8
   },
   particleEmitter: {
-    duration: Infinity,
+    duration: 10,
     rate: 0.01,
     numParticles: 300,
     particles: [{
@@ -51,15 +33,28 @@ var jimPrefab = {
   }
 };
 
-var bob = new CES.Entity(heroPrefab, 'bob');
-
-world.addEntity(bob);
-world.addEntity(new CES.Entity(jimPrefab, 'jim'));
+var hero1 = {
+  transform: {
+    x: 100,
+    y: 100,
+    sx: 1,
+    sy: 1,
+    r: 0
+  },
+  character: {
+    template: 'elf'
+  }
+};
 
 world.addSystem(InputSystem);
 world.addSystem(PlayerSystem);
+world.addSystem(CharacterSystem);
 world.addSystem(CanvasRenderer);
 world.addSystem(ParticleSystem);
+
+// until proper events added, entities have to be added AFTER systems
+world.addEntity(new CES.Entity(hero, 'hero'));
+world.addEntity(new CES.Entity(hero1, 'dynamic hero'));
 
 function run() {
   world.step();

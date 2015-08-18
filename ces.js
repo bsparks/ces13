@@ -48,15 +48,17 @@ function clone(obj) {
     throw new Error("Unable to copy obj! Its type isn't supported.");
 }
 
+// this is used for entity object hashes
 function toArray(obj) {
-  var array = [];
-  for (var key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      array.push(obj[key]);
+    var array = [];
+    for (var key in obj) {
+        // we don't copy "private" variables either
+        if (obj.hasOwnProperty(key) && key[0] !== '_') {
+            array.push(obj[key]);
+        }
     }
-  }
-
-  return array;
+  
+    return array;
 }
 
 var CES = {};
@@ -66,6 +68,9 @@ CES.Entity = function(components, name) {
     this.name = name || 'entity';
 
     this._components = clone(components);
+    
+    this.onComponentAdded = new Signal();
+    this.onComponentRemoved = new Signal();
 };
 
 CES.Entity.prototype = {
@@ -74,6 +79,16 @@ CES.Entity.prototype = {
   },
   getComponent: function(name) {
     return this._components[name];
+  },
+  addComponent: function(name, data) {
+    if (this.hasComponent(name)) {
+      // already has!
+      console.warn(this.name, 'already has a', name, 'component!');
+      return;
+    }
+    
+    this._components[name] = clone(data);
+    this.onComponentAdded.emit(this, name);
   }
 };
 CES.Entity.prototype.constructor = CES.Entity;
@@ -105,48 +120,78 @@ CES.World.prototype = {
     return this._systemRegistry[name] || null;
   },
   addEntity: function(entity) {
+    var world = this;
+    
+    entity.onComponentAdded.add(function(entity, componentName) {
+      world._joinFamilies(entity);  
+    });
+    
     this._entities[entity.id] = entity;
     // update families
     this._joinFamilies(entity);
     // fire callbacks
+  },
+  onComponentAdded: function(entity, componentName) {
+    console.debug('component added at runtime: ', entity.id, componentName);
+    this._joinFamilies(entity);
   },
   removeEntity: function(entity) {
     // remove from entities
     // remove from families
   },
   getEntities: function(/** components **/) {
-    var components = Array.prototype.slice.call(arguments),
-      family = components.join('+');
+    var components = Array.prototype.slice.call(arguments);
 
-    if (this._families[family]) {
-      return toArray(this._families[family]);
-    } else {
+    return toArray(this._getFamily.apply(this, components));
+  },
+  onEntityAdded: function(/** components **/) {
+    var components = Array.prototype.slice.call(arguments);
+    var family = this._getFamily.apply(this, components);
+    
+    // return the signal for this family specifically
+    return family._onEntityAdded;
+  },
+  _getFamily: function(/** components **/) {
+    var components = Array.prototype.slice.call(arguments),
+      familyName = components.join('+'),
+      family = this._families[familyName];
+      
+    if (!family) {
       // build the family
-      this._families[family] = {};
+      family = this._families[familyName] = {};
+      family._onEntityAdded = new Signal();
+      family._onEntityRemoved = new Signal();
       toArray(this._entities).forEach(function(entity) {
-        var match = components.every(function(component) {
-            return entity.hasComponent(component);
+          var match = components.every(function(component) {
+              return entity.hasComponent(component);
           });
 
         if (match) {
-          this._families[family][entity.id] = entity;
+            family[entity.id] = entity;
         }
       }, this);
-
-      return toArray(this._families[family]);
     }
+    return family;
   },
   _joinFamilies: function(entity) {
-    for (var family in this._families) {
-      var components = family.split('+');
-      var match = components.every(function(component) {
-          return entity.hasComponent(component);
-        });
-
-      if (match) {
-        this._families[family][entity.id] = entity;
+      var family;
+      for (var familyName in this._families) {
+          family = this._families[familyName];
+          if (family[entity.id]) {
+            // already has
+            continue;
+          }
+          
+          var components = familyName.split('+');
+          var match = components.every(function(component) {
+              return entity.hasComponent(component);
+          });
+    
+          if (match) {
+              family[entity.id] = entity;
+              family._onEntityAdded.emit(entity);
+          }
       }
-    }
   },
   step: function() {
     var current = window.performance.now(),
