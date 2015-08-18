@@ -68,9 +68,6 @@ CES.Entity = function(components, name) {
     this.name = name || 'entity';
 
     this._components = clone(components);
-    
-    this.onComponentAdded = new Signal();
-    this.onComponentRemoved = new Signal();
 };
 
 CES.Entity.prototype = {
@@ -88,7 +85,7 @@ CES.Entity.prototype = {
     }
     
     this._components[name] = clone(data);
-    this.onComponentAdded.emit(this, name);
+    window.dispatchEvent(new CustomEvent('entityOnComponentAdded', {detail: {entity: this, component: name}}));
   }
 };
 CES.Entity.prototype.constructor = CES.Entity;
@@ -122,8 +119,8 @@ CES.World.prototype = {
   addEntity: function(entity) {
     var world = this;
     
-    entity.onComponentAdded.add(function(entity, componentName) {
-      world._joinFamilies(entity);  
+    window.addEventListener('entityOnComponentAdded', function(e) {
+        world._joinFamilies(e.detail.entity);
     });
     
     this._entities[entity.id] = entity;
@@ -145,11 +142,18 @@ CES.World.prototype = {
     return toArray(this._getFamily.apply(this, components));
   },
   onEntityAdded: function(/** components **/) {
-    var components = Array.prototype.slice.call(arguments);
+    var components = Array.prototype.slice.call(arguments),
+        familyName = components.join('+');
     var family = this._getFamily.apply(this, components);
     
-    // return the signal for this family specifically
-    return family._onEntityAdded;
+    // handle events for a family addition
+    return {
+        add: function(callback) {
+            window.addEventListener(familyName + '-onEntityAdded', function(e) {
+                callback.call(null, e.detail.entity);
+            });
+        }
+    };
   },
   _getFamily: function(/** components **/) {
     var components = Array.prototype.slice.call(arguments),
@@ -159,8 +163,6 @@ CES.World.prototype = {
     if (!family) {
       // build the family
       family = this._families[familyName] = {};
-      family._onEntityAdded = new Signal();
-      family._onEntityRemoved = new Signal();
       toArray(this._entities).forEach(function(entity) {
           var match = components.every(function(component) {
               return entity.hasComponent(component);
@@ -189,7 +191,7 @@ CES.World.prototype = {
     
           if (match) {
               family[entity.id] = entity;
-              family._onEntityAdded.emit(entity);
+              window.dispatchEvent(new CustomEvent(familyName + '-onEntityAdded', {detail: {entity: entity}}));
           }
       }
   },

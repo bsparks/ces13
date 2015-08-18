@@ -4,7 +4,6 @@ var gulp = require('gulp'),
 
 gulp.task('default', function() {
     return gulp.src([
-        "services/signal.js",
         "ces.js",
         "services/graphics.js",
         "services/easing.js",

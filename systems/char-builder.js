@@ -82,10 +82,11 @@
     function getHead(ctx, template) {
         // our set of pixel tiles
         var palette = [
-            {r: 0,   g: 0,   b: 0,   a: 0},
+            Graphics.colors.transparent,
             {r: 86,  g: 115, b: 26,  a: 1}, // hat
             {r: 227, g: 208, b: 100, a: 1}, // face
-            {r: 0,   g: 0,   b: 0,   a: 1}  // eyes
+            Graphics.getRandomColor()
+            //{r: 0,   g: 0,   b: 0,   a: 1}  // eyes
         ];
          
         return getTemplateImageData(ctx, template, 6, 4, palette);
@@ -93,7 +94,7 @@
     
     function getBody(ctx, template) {
         var palette = [
-            {r: 0,   g: 0,   b: 0,   a: 0},
+            Graphics.colors.transparent,
             {r: 86,  g: 115, b: 26,  a: 1}, // shirt
             {r: 227, g: 208, b: 100, a: 1}, // hand
             {r: 85,  g: 43,  b: 21,  a: 1}, // belt
@@ -105,7 +106,7 @@
     
     function getLegs(ctx, template) {
         var palette = [
-            {r: 0,   g: 0,   b: 0,   a: 0},
+            Graphics.colors.transparent,
             {r: 86,  g: 115, b: 26,  a: 1}, // pants
             {r: 72,  g: 72,  b: 80,  a: 1}  // shoes
         ];
@@ -115,7 +116,7 @@
     
     function getWeapon(ctx, template) {
         var palette = [
-            {r: 0,   g: 0,   b: 0,   a: 0},
+            Graphics.colors.transparent,
             {r: 86,  g: 115, b: 26,  a: 1}, // shirt
             {r: 227, g: 208, b: 100, a: 1}, // hand
             {r: 180, g: 180, b: 172, a: 1}  // sword
