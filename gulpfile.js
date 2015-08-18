@@ -8,7 +8,7 @@ gulp.task('default', function() {
         "services/graphics.js",
         "services/easing.js",
         "services/image-loader.js",
-        "services/input-system.js",
+        "systems/input-system.js",
         "systems/player-system.js",
         "systems/canvas-renderer.js",
         "systems/particle-system.js",
