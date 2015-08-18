@@ -4,12 +4,17 @@ var gulp = require('gulp'),
 
 gulp.task('default', function() {
     return gulp.src([
-        'ces.js',
-        'services/input-system.js',
-        'services/image-loader.js',
-        'systems/player-system.js',
-        'systems/canvas-renderer.js',
-        'main.js'
+        "services/signal.js",
+        "ces.js",
+        "services/graphics.js",
+        "services/easing.js",
+        "services/image-loader.js",
+        "services/input-system.js",
+        "systems/player-system.js",
+        "systems/canvas-renderer.js",
+        "systems/particle-system.js",
+        "systems/char-builder.js",
+        "main.js"
     ])
     .pipe(concat('game.js'))
     .pipe(uglify())
