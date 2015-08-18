@@ -12,9 +12,9 @@ var hero = {
     sy: 1,
     r: 0
   },
-  sprite: {
-    image: 'assets/images/hero.png',
-    alpha: 1
+  character: {
+    template: 'elf',
+    head: 1
   },
   player: {
     speed: 8

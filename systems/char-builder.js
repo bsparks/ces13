@@ -1,51 +1,48 @@
 (function(Graphics) {
     'use strict';
-    
-    var char = [
-        1,1,1,1,1,1,4,4,
-        1,1,1,1,1,1,4,4,
-        1,1,1,1,1,1,4,4,
-        1,1,1,1,1,1,4,4,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,4,4,
-        3,3,3,3,3,3,4,4,
-        3,3,3,3,3,3,4,4
-    ];
-    
-    var head1 = [
-        1,1,1,1,1,0,
-        0,1,1,1,1,1,
-        0,2,3,2,3,2,
-        0,2,2,2,2,2
-    ];
-    
-    var head2 = [
-        1,1,1,1,1,0,
-        0,1,1,1,1,1,
-        0,1,3,2,3,1,
-        0,1,2,2,2,1
-    ];
-    
-    var body1 = [
-        1,1,1,1,1,1,
-        2,3,3,4,3,3
-    ];
-    
-    var legs1 = [
-        0,1,1,1,1,1,
-        0,2,2,0,2,2
-    ];
-    
-    var weapon1 = [
-        0,0,
-        0,3,
-        0,3,
-        0,3,
-        1,2,
-        0,0,
-        0,0,
-        0,0
-    ];
+
+    var TEMPLATES = {
+        elf: {
+            head: [
+                [
+                    1,1,1,1,1,0,
+                    0,1,1,1,1,1,
+                    0,2,3,2,3,2,
+                    0,2,2,2,2,2
+                ],
+                [
+                    1,1,1,1,1,0,
+                    0,1,1,1,1,1,
+                    0,1,3,2,3,1,
+                    0,1,2,2,2,1
+                ]
+            ],
+            body: [
+                [
+                    1,1,1,1,1,1,
+                    2,3,3,4,3,3
+                ]    
+            ],
+            legs: [
+                [
+                    0,1,1,1,1,1,
+                    0,2,2,0,2,2
+                ]    
+            ],
+            weapon: [
+                [
+                    0,0,
+                    0,3,
+                    0,3,
+                    0,3,
+                    1,2,
+                    0,0,
+                    0,0,
+                    0,0
+                ]    
+            ]
+        }
+    }; 
     
     // gets the cell value of a square map from 1d array
     function getMapCell(x, y, sx, sy, map) {
@@ -127,7 +124,7 @@
         return getTemplateImageData(ctx, template, 2, 8, palette);
     }
     
-    function buildChar() {
+    function buildChar(charData) {
         var canvas = document.createElement('canvas'),
             context = canvas.getContext('2d'),
             size = 8,
@@ -136,10 +133,11 @@
         canvas.width = canvas.height = size;
         context.imageSmoothingEnabled = false;
         
-        var headImageData = getHead(context, head2);
-        var bodyImageData = getBody(context, body1);
-        var legsImageData = getLegs(context, legs1);
-        var weapImageData = getWeapon(context, weapon1);
+        var templateBank = TEMPLATES[charData.template];
+        var headImageData = getHead(context, templateBank.head[charData.head || 0]);
+        var bodyImageData = getBody(context, templateBank.body[charData.body || 0]);
+        var legsImageData = getLegs(context, templateBank.legs[charData.legs || 0]);
+        var weapImageData = getWeapon(context, templateBank.weapon[charData.weapon || 0]);
         
         context.putImageData(headImageData, 0, 0);
         context.putImageData(bodyImageData, 0, 4);
