@@ -43,11 +43,18 @@ var hero1 = {
   },
   character: {
     template: 'elf'
-  }
+  },
+  body: {
+    mass: 1,
+    v: {x: 0, y: 0},
+    a: {x: 0, y: 0}
+  },
+  gravity: {value: 0}
 };
 
 world.addSystem(InputSystem);
 world.addSystem(PlayerSystem);
+world.addSystem(PhysicsSystem);
 world.addSystem(CharacterSystem);
 world.addSystem(CanvasRenderer);
 world.addSystem(ParticleSystem);

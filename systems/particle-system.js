@@ -59,8 +59,10 @@ ParticleSystem.prototype.update = function (delta, elapsed) {
         particle.a = particle.a || {x: 0, y: 0};
 
         // v += 0.5 * a * dt
-        particle.v.x += 0.5 * particle.a.x * delta;
-        particle.v.y += 0.5 * particle.a.y * delta;
+        particle.v.x += /*0.5 **/ particle.a.x * delta;
+        particle.v.y += /*0.5 **/ particle.a.y * delta;
+        
+        //particle.a.x = particle.a.y = 0;
 
         particle.x += particle.v.x * delta;
         particle.y += particle.v.y * delta;

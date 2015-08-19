@@ -5,6 +5,7 @@ var gulp = require('gulp'),
 gulp.task('default', function() {
     return gulp.src([
         "ces.js",
+        "services/map.js",
         "services/graphics.js",
         "services/easing.js",
         "services/image-loader.js",
@@ -13,6 +14,7 @@ gulp.task('default', function() {
         "systems/canvas-renderer.js",
         "systems/particle-system.js",
         "systems/char-builder.js",
+        "systems/physics.js",
         "main.js"
     ])
     .pipe(concat('game.js'))
