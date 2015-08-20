@@ -19,6 +19,12 @@ var hero = {
   player: {
     speed: 8
   },
+  body: {
+    mass: 3,
+    v: {x: 0, y: 0},
+    a: {x: 0, y: 0}
+  },
+  gravity: {},
   particleEmitter: {
     duration: 10,
     rate: 0.01,
@@ -49,7 +55,7 @@ var hero1 = {
     v: {x: 0, y: 0},
     a: {x: 0, y: 0}
   },
-  gravity: {value: 0}
+  gravity: {}
 };
 
 world.addSystem(InputSystem);
