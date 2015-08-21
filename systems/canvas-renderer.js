@@ -45,7 +45,9 @@ function CanvasRenderer(world) {
   		var x = -Math.round(shape.width / 2);
   		var y = -Math.round(shape.height / 2);
   		ctx.fillRect(x, y, shape.width, shape.height);
-  		ctx.strokeRect(x, y, shape.width, shape.height);
+  		if (shape.stroke) {
+  		  ctx.strokeRect(x, y, shape.width, shape.height);
+  		}
   	},
   	arc: function (ctx, shape) {
   		ctx.beginPath();
@@ -88,10 +90,12 @@ function CanvasRenderer(world) {
         loopMap(tilemap.map, tilemap.w, tilemap.h, function(x, y, cell, index, map) {
             if (cell === 1) {
                 renderer.ctx.save();
-              	renderer.ctx.translate(Math.round(x * tilemap.sx), Math.round(y * tilemap.sy));
+              	renderer.ctx.translate(Math.round(x * tilemap.sx + (tilemap.sx / 2)), Math.round(y * tilemap.sy + (tilemap.sy / 2)));
                 renderer.drawShape({
                     type: 'rect',
                     fill: 'green',
+                    //stroke: 'black',
+                    lineWidth: 1,
                     width: tilemap.sx,
                     height: tilemap.sy
                 });
