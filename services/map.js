@@ -1,9 +1,15 @@
 // tilemap utils
 
+function getMapIndex(x, y, width) {
+    var i = ((y >> 0) * width + (x >> 0));
+    
+    return i;
+}
+
 // gets the cell value of a square map from 1d array
 function getMapCell(x, y, sx, sy, map) {
     var cell,
-        i = ((y >> 0) * sx + (x >> 0));
+        i = getMapIndex(x, y, sx);
         
     if (i > map.length) {
         console.warn('OOB!');
@@ -19,8 +25,9 @@ function getMapCell(x, y, sx, sy, map) {
 function loopMap(map, sx, sy, callback) {
     for (var y=0; y<sy; y++) {
         for (var x=0; x<sx; x++) {
-            var cell = getMapCell(x, y, sx, sy, map);
-            callback.call(null, x, y, cell, map);
+            var cell = getMapCell(x, y, sx, sy, map),
+                index = getMapIndex(x, y, sx);
+            callback.call(null, x, y, cell, index, map);
         }
     }
 }

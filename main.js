@@ -58,8 +58,26 @@ var hero1 = {
   gravity: {}
 };
 
+var level1 = {
+    transform: {
+        x: 0,
+        y: 0,
+        sx: 1,
+        sy: 1,
+        r: 0
+    },
+    tilemap: {
+        w: 40,
+        h: 30,
+        sx: 8,
+        sy: 8,
+        map: []
+    }
+};
+
 world.addSystem(InputSystem);
 world.addSystem(PlayerSystem);
+world.addSystem(TileMapSystem);
 world.addSystem(PhysicsSystem);
 world.addSystem(CharacterSystem);
 world.addSystem(CanvasRenderer);
@@ -68,6 +86,7 @@ world.addSystem(ParticleSystem);
 // until proper events added, entities have to be added AFTER systems
 world.addEntity(new CES.Entity(hero, 'hero'));
 world.addEntity(new CES.Entity(hero1, 'dynamic hero'));
+world.addEntity(new CES.Entity(level1, 'level'));
 
 function run() {
   world.step();

@@ -47,7 +47,7 @@
     function getTemplateImageData(ctx, template, sw, sh, palette) {
         var imageData = ctx.createImageData(sw, sh);
         
-        loopMap(template, sw, sh, function(x, y, cell, template) {
+        loopMap(template, sw, sh, function(x, y, cell) {
             Graphics.drawPixel(imageData, x, y, palette[cell]);
         });
         

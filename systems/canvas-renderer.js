@@ -80,6 +80,25 @@ function CanvasRenderer(world) {
     var renderer = this;
 
     this.clear('#cccccc');
+    
+    this.world.getEntities('transform', 'tilemap').forEach(function(entity) {
+        var transform = entity.getComponent('transform'),
+            tilemap = entity.getComponent('tilemap');
+            
+        loopMap(tilemap.map, tilemap.w, tilemap.h, function(x, y, cell, index, map) {
+            if (cell === 1) {
+                renderer.ctx.save();
+              	renderer.ctx.translate(Math.round(x * tilemap.sx), Math.round(y * tilemap.sy));
+                renderer.drawShape({
+                    type: 'rect',
+                    fill: 'green',
+                    width: tilemap.sx,
+                    height: tilemap.sy
+                });
+                renderer.ctx.restore();
+            }
+        });
+    });
 
     this.world.getEntities('transform', 'sprite').forEach(function(entity) {
       var transform = entity.getComponent('transform'),
