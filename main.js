@@ -24,6 +24,10 @@ var hero = {
     v: {x: 0, y: 0},
     a: {x: 0, y: 0}
   },
+  collision: {
+      group: PhysicsSystem.COLLISION_GROUPS.PLAYERS,
+      mask: PhysicsSystem.COLLISION_GROUPS.NPCS | PhysicsSystem.COLLISION_GROUPS.GROUND
+  },
   gravity: {},
   particleEmitter: {
     duration: 10,

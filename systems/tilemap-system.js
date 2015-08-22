@@ -13,7 +13,7 @@ function TileMapSystem(world) {
 
 TileMapSystem.prototype.generate = function(tilemap) {
     loopMap(tilemap.map, tilemap.w, tilemap.h, function(x, y, cell, index, map) {
-        map[index] = Math.floor(randomRange(0, 1));
+        map[index] = (y >= (Math.floor(tilemap.h * 0.90))) ? 1 : 0;
     });
 };
 

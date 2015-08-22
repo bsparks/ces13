@@ -2,9 +2,18 @@ function PhysicsSystem(world) {
     this.world = world;
 }
 
+PhysicsSystem.COLLISION_GROUPS = {
+    NONE: BIT(0),
+    GROUND: BIT(1),
+    PLAYERS: BIT(2),
+    NPCS: BIT(3),
+    PROJECTILES: BIT(4)
+};
+
 PhysicsSystem.prototype.update = function(dt) {
     var integration = this.world.getEntities('transform', 'body'),
-        gravityBehavior = this.world.getEntities('body', 'gravity');
+        gravityBehavior = this.world.getEntities('body', 'gravity'),
+        colliders = this.world.getEntities('transform', 'collision');
         
     var MAX_VELOCITY = 2;
         
@@ -25,6 +34,15 @@ PhysicsSystem.prototype.update = function(dt) {
         }
         
         body.a.y += gravity.value * body.mass;
+    });
+    
+    colliders.forEach(function(entity) {
+        var transform = entity.getComponent('transform'),
+            collision = entity.getComponent('collision');
+            
+        if (collision.shape.type === 'box') {
+            var extent = {top: transform.y - collision.shape.sy / 2, left: transform.x - collision.shape.sx / 2, w: collision.shape.sx, h: collision.shape.sy};
+        } 
     });
     
     integration.forEach(function(entity) {

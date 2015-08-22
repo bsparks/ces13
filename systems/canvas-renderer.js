@@ -80,8 +80,11 @@ function CanvasRenderer(world) {
 
   this.update = function(delta, elapsed, ts) {
     var renderer = this;
-
-    this.clear('#cccccc');
+    
+    var gradient = this.ctx.createLinearGradient(0,0,this.canvas.width, this.canvas.height);
+    gradient.addColorStop(0, 'dodgerblue');
+    gradient.addColorStop(1, 'white');
+    this.clear(gradient);
     
     this.world.getEntities('transform', 'tilemap').forEach(function(entity) {
         var transform = entity.getComponent('transform'),
