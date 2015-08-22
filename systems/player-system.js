@@ -10,14 +10,18 @@ function PlayerSystem(world) {
             transform = player.getComponent('transform'),
             body = player.getComponent('body');
 
-            if (input.pressed('LEFT')) {
+            if (input.down('LEFT')) {
                 //console.log('left: ', transform, player, dt);
-                transform.x -= pc.speed;
+                body.a.x -= pc.speed;
                 transform.sx = -1 * Math.abs(transform.sx);
             }
+            
+            if (input.released('LEFT') || input.released('RIGHT')) {
+                body.v.x *= 0.99;
+            }
 
-            if (input.pressed('RIGHT')) {
-                transform.x += pc.speed;
+            if (input.down('RIGHT')) {
+                body.a.x += pc.speed;
                 transform.sx = Math.abs(transform.sx);
             }
 
@@ -27,7 +31,7 @@ function PlayerSystem(world) {
                     // cheat on the xform so that we get unstuck from the ground
                     transform.y -= 1;
                     
-                    body.a.y -= 10000;
+                    body.a.y -= pc.jump * 1000 || 10000;
                     body.grounded = false;
                 }
             }

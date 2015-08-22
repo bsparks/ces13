@@ -25,6 +25,9 @@ InputSystem.prototype.onKeyDown = function(event) {
 InputSystem.prototype.onKeyUp = function(event) {
     this._keys[event.keyCode] = this._keys[event.keyCode] || {};
     this._keys[event.keyCode].down = false;
+    if (this._keys[event.keyCode].pressed) {
+        this._keys[event.keyCode].released = true;
+    }
 };
 
 InputSystem.prototype._getKey = function(which) {
@@ -61,4 +64,18 @@ InputSystem.prototype.down = function(which) {
       return false;
     }
     return key.down;
+};
+
+InputSystem.prototype.released = function(which) {
+    var key = this._getKey(which);
+    if (!key) {
+      return false;
+    }
+
+    if (key.released) {
+      key.released = false;
+      return true;
+    }
+
+    return false;
 };

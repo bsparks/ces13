@@ -52,10 +52,22 @@ PhysicsSystem.prototype.update = function(dt) {
         if (!body.mass) {
             body.mass = 1;
         }
+        
+        var drag = 0.0055;
+        var friction = 0.015;
 
         // update velocity
         body.v.x += ((body.a.x / body.mass) * dt * dt);
         body.v.y += ((body.a.y / body.mass) * dt * dt);
+        
+        // air drag
+        body.v.x -= body.v.x * drag;
+        body.v.y -= body.v.y * drag;
+        
+        if(body.grounded) {
+            // apply friction
+            body.v.x -= body.v.x * friction;
+        }
         
         // terminal velocity
         //console.debug('foo', body.v);

@@ -17,18 +17,22 @@ var hero = {
     head: 1
   },
   player: {
-    speed: 8
+    speed: 200,
+    jump: 20
   },
   body: {
-    mass: 3,
+    mass: 10,
     v: {x: 0, y: 0},
     a: {x: 0, y: 0}
   },
   collision: {
+      shape: {
+        type: 'box'
+      },
       group: PhysicsSystem.COLLISION_GROUPS.PLAYERS,
       mask: PhysicsSystem.COLLISION_GROUPS.NPCS | PhysicsSystem.COLLISION_GROUPS.GROUND
   },
-  gravity: {},
+  gravity: {value: 45},
   particleEmitter: {
     duration: 10,
     rate: 0.01,
