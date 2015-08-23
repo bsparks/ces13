@@ -1,9 +1,24 @@
 // tilemap utils
 
 function getMapIndex(x, y, width) {
+    if (x < 0 || y < 0) {
+        // outside the array!
+        return -1;
+    }
+    
     var i = ((y >> 0) * width + (x >> 0));
     
     return i;
+}
+
+// take world coords (screen) and get tilemap coords
+function getTileCoordsFromWorld(x, y, sx, sy) {
+    sy = sy || sx;
+    
+    var x = Math.floor(x / sx);
+    var y = Math.floor(y / sy);
+    
+    return {x, y};
 }
 
 // gets the cell value of a square map from 1d array
@@ -11,13 +26,21 @@ function getMapCell(x, y, sx, sy, map) {
     var cell,
         i = getMapIndex(x, y, sx);
         
-    if (i > map.length) {
+    if (i > map.length || i < 0) {
         console.warn('OOB!');
         return null;
     }
     
     cell = map[i];
     
+    return cell;
+}
+
+function getMapCellFromWorld(x, y, tilemap) {
+    var coords = getTileCoordsFromWorld(x, y, tilemap.sx, tilemap.sy);
+    
+    var cell = getMapCell(coords.x, coords.y, tilemap.w, tilemap.h, tilemap.map);
+
     return cell;
 }
 

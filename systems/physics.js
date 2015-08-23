@@ -11,9 +11,10 @@ PhysicsSystem.COLLISION_GROUPS = {
 };
 
 PhysicsSystem.prototype.update = function(dt) {
-    var integration = this.world.getEntities('transform', 'body'),
+    var world = this.world,
+        integration = this.world.getEntities('transform', 'body'),
         gravityBehavior = this.world.getEntities('body', 'gravity'),
-        colliders = this.world.getEntities('transform', 'collision');
+        colliders = this.world.getEntities('transform', 'collision', 'body');
         
     var MAX_VELOCITY = 2;
         
@@ -38,11 +39,35 @@ PhysicsSystem.prototype.update = function(dt) {
     
     colliders.forEach(function(entity) {
         var transform = entity.getComponent('transform'),
-            collision = entity.getComponent('collision');
+            collision = entity.getComponent('collision'),
+            body = entity.getComponent('body');
             
-        if (collision.shape.type === 'box') {
-            var extent = {top: transform.y - collision.shape.sy / 2, left: transform.x - collision.shape.sx / 2, w: collision.shape.sx, h: collision.shape.sy};
-        } 
+        collision.boundingBox = collision.boundingBox || {};
+        
+        collision.boundingBox.x1 = transform.x - (collision.shape.sx / 2);
+        collision.boundingBox.y1 = transform.y - (collision.shape.sy / 2);
+        collision.boundingBox.x2 = Math.round(collision.boundingBox.x1 + collision.shape.sx);
+        collision.boundingBox.y2 = Math.round(collision.boundingBox.y1 + collision.shape.sy);
+        collision.boundingBox.w = collision.shape.sx;
+        collision.boundingBox.h = collision.shape.sy;
+        
+        var extent = collision.boundingBox;
+
+        if (!body.grounded && (collision.mask & PhysicsSystem.COLLISION_GROUPS.GROUND)) {
+            var maps = world.getEntities('tilemap');
+            maps.forEach(function(mapEntity) {
+                var tilemap = mapEntity.getComponent('tilemap');
+                // get the 2 corners for where it *will* be
+                var bottomLeft = getMapCellFromWorld(extent.x1 + body.v.x, extent.y2 + body.v.y, tilemap),
+                    bottomRight = getMapCellFromWorld(extent.x2 + body.v.x, extent.y2 + body.v.y, tilemap);
+                //console.debug('test: ', bottomLeft, extent.x1 + body.v.x, extent.y2 + body.v.y, getTileCoordsFromWorld(extent.x1 + body.v.x, extent.y2 + body.v.y, 8));
+                // for now, just 1 will be colliding ground
+                if (bottomLeft === 1 || bottomRight === 1) {
+                    body.grounded = true;
+                    console.debug('test collision: ', bottomLeft, bottomRight, extent, body.v);
+                }
+            });
+        }
     });
     
     integration.forEach(function(entity) {
@@ -64,11 +89,6 @@ PhysicsSystem.prototype.update = function(dt) {
         body.v.x -= body.v.x * drag;
         body.v.y -= body.v.y * drag;
         
-        if(body.grounded) {
-            // apply friction
-            body.v.x -= body.v.x * friction;
-        }
-        
         // terminal velocity
         //console.debug('foo', body.v);
         if (Math.abs(body.v.y) > MAX_VELOCITY) {
@@ -78,16 +98,22 @@ PhysicsSystem.prototype.update = function(dt) {
         if (Math.abs(body.v.x) > MAX_VELOCITY) {
             body.v.x < 0 ? body.v.x = -MAX_VELOCITY : body.v.x = MAX_VELOCITY;
         }
-        
-        // fake ground for now
-        if (transform.y > 200 && !body.grounded) {
-            body.v.y = 0;
-            body.grounded = true;
-        }
 
         // update position
         transform.x += body.v.x;
         transform.y += body.v.y;
+        
+        if (body.grounded) {
+            // apply friction
+            body.v.x -= body.v.x * friction;
+            body.v.y = 0;
+        }
+        
+        // fake ground for now
+        if (transform.y > 230 && !body.grounded) {
+           // body.v.y = 0;
+           body.grounded = true;
+        }
 
         // reset accel
         body.a.x = body.a.y = 0;

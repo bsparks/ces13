@@ -13,7 +13,7 @@ function PlayerSystem(world) {
             if (input.down('LEFT')) {
                 //console.log('left: ', transform, player, dt);
                 body.a.x -= pc.speed;
-                transform.sx = -1 * Math.abs(transform.sx);
+                transform.dx = -1;
             }
             
             if (input.released('LEFT') || input.released('RIGHT')) {
@@ -22,7 +22,7 @@ function PlayerSystem(world) {
 
             if (input.down('RIGHT')) {
                 body.a.x += pc.speed;
-                transform.sx = Math.abs(transform.sx);
+                transform.dx = 1;
             }
 
             if (input.pressed('UP')) {

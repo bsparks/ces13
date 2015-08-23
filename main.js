@@ -7,10 +7,12 @@ world.assets.images = new ImageLoader();
 var hero = {
   transform: {
     x: 200,
-    y: 100,
+    y: 190,
     sx: 1,
     sy: 1,
-    r: 0
+    r: 0,
+    dx: 1,
+    dy: 1
   },
   character: {
     template: 'elf',
@@ -27,7 +29,9 @@ var hero = {
   },
   collision: {
       shape: {
-        type: 'box'
+        type: 'box',
+        sx: 8,
+        sy: 8
       },
       group: PhysicsSystem.COLLISION_GROUPS.PLAYERS,
       mask: PhysicsSystem.COLLISION_GROUPS.NPCS | PhysicsSystem.COLLISION_GROUPS.GROUND
@@ -53,7 +57,9 @@ var hero1 = {
     y: 100,
     sx: 1,
     sy: 1,
-    r: 0
+    r: 0,
+    dx: 1,
+    dy: 1
   },
   character: {
     template: 'elf'
@@ -62,6 +68,15 @@ var hero1 = {
     mass: 1,
     v: {x: 0, y: 0},
     a: {x: 0, y: 0}
+  },
+  collision: {
+      shape: {
+        type: 'box',
+        sx: 8,
+        sy: 8
+      },
+      group: PhysicsSystem.COLLISION_GROUPS.NPCS,
+      mask: PhysicsSystem.COLLISION_GROUPS.PLAYERS | PhysicsSystem.COLLISION_GROUPS.GROUND
   },
   gravity: {}
 };
@@ -72,7 +87,9 @@ var level1 = {
         y: 0,
         sx: 1,
         sy: 1,
-        r: 0
+        r: 0,
+        dx: 1,
+        dy: 1
     },
     tilemap: {
         w: 40,
