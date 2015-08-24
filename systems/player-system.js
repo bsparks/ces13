@@ -33,6 +33,10 @@ function PlayerSystem(world) {
                     
                     body.a.y -= pc.jump * 1000 || 10000;
                     body.grounded = false;
+                    tones.play('d');
+                    tones.play('f');
+                    tones.play('a');
+                    tones.play('c', 2);
                 }
             }
 

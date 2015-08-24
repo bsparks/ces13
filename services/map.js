@@ -15,10 +15,12 @@ function getMapIndex(x, y, width) {
 function getTileCoordsFromWorld(x, y, sx, sy) {
     sy = sy || sx;
     
-    var x = Math.floor(x / sx);
-    var y = Math.floor(y / sy);
+    x = Math.floor(x / sx);
+    y = Math.floor(y / sy);
     
-    return {x, y};
+    // uglify can't handle the es6 (well nodejs)
+    //return {x, y};
+    return {x: x, y: y};
 }
 
 // gets the cell value of a square map from 1d array
