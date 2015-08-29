@@ -171,7 +171,7 @@ function CanvasRenderer(world) {
           renderer.ctx.restore();
     });
     
-    this.world.getEntities('collision').forEach(function(entity){ 
+    this.world.getEntities('collision').forEach(function(entity) { 
         var collision = entity.getComponent('collision'),
             boundingBox = collision.boundingBox;
             
@@ -179,18 +179,18 @@ function CanvasRenderer(world) {
           return;
         }
             
-        if (boundingBox && boundingBox.w) {
+        if (boundingBox && boundingBox.width) {
             renderer.ctx.save();
-            var x = Math.round(boundingBox.x1);
-          	var y = Math.round(boundingBox.y1);
+            var x = Math.round(boundingBox.x);
+          	var y = Math.round(boundingBox.y);
           	renderer.ctx.translate(x, y);
             renderer.drawShape({
                 type: 'rect',
                 //fill: 'transparent',
                 stroke: 'red',
                 lineWidth: 1,
-                width: boundingBox.w,
-                height: boundingBox.h
+                width: boundingBox.width,
+                height: boundingBox.height
             });
             renderer.ctx.restore();
         }

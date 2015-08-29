@@ -28,6 +28,7 @@ var hero = {
     a: {x: 0, y: 0}
   },
   collision: {
+      debug: false,
       shape: {
         type: 'box',
         sx: 8,
